@@ -514,7 +514,7 @@ class CzechDTMParser:
         QgsProject.instance().addMapLayer(scale_layer, False)
         parent_group.addLayer(scale_layer)
 
-        self.export_gpkg(scale_layer, "/tmp/dtm.gkpg")
+        self.export_gpkg(scale_layer, "/tmp/dtm")
 
     def export_gpkg(self, layer, output_gpkg):
         from qgis.core import QgsVectorFileWriter
