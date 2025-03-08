@@ -514,6 +514,27 @@ class CzechDTMParser:
         QgsProject.instance().addMapLayer(scale_layer, False)
         parent_group.addLayer(scale_layer)
 
+        self.export_gpkg(scale_layer, "/tmp/dtm.gkpg")
+
+    def export_gpkg(self, layer, output_gpkg):
+        from qgis.core import QgsVectorFileWriter
+
+        options = QgsVectorFileWriter.SaveVectorOptions()
+        options.driverName = "GPKG"
+        options.layerName = layer.name()
+        options.fileEncoding = "UTF-8"
+        options.actionOnExistingFile = QgsVectorFileWriter.CreateOrOverwriteLayer
+
+        error = QgsVectorFileWriter.writeAsVectorFormatV2(
+            layer,
+            output_gpkg,
+            QgsProject.instance().transformContext(),
+            options
+        )
+
+        if error[0] != QgsVectorFileWriter.NoError:
+            print(f"GPKG export fails: {error}")
+
     def create_group(self, group_name: str, parent=None):
         if parent is None:
             parent = QgsProject.instance().layerTreeRoot()
